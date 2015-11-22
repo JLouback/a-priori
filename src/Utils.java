@@ -20,6 +20,8 @@ public class Utils {
 				}
 			}
 		}
+		br.close();
+
 		return counts;
 	}
 }
