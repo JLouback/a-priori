@@ -40,7 +40,6 @@ public class Algorithmn {
 	
 	public TreeSet<Itemset> join(TreeSet<Itemset> itemsets, int k) {
 		TreeSet<Itemset> candidates = new TreeSet<Itemset>();
-		Itemset candidate;
 		
 		Iterator<Itemset> it = itemsets.iterator(); 
 		while (it.hasNext()) {
@@ -48,16 +47,12 @@ public class Algorithmn {
 			Iterator<Itemset> it2 = itemsets.tailSet(p).iterator();
 			while (it2.hasNext()) {
 				Itemset q = it2.next();
-				if (validJoin(p, q, k)) {
-					System.out.println("Valid join:");
-					System.out.println("\t" + p);
-					System.out.println("\t" + q);
-					candidate = p;
-					// candidate.items.add(q.items.get(k-2));
-					// candidates.add(candidate);
-				}
+				if (validJoin(p, q, k))
+					candidates.add(new Itemset(p, q));
 			}
 		}
+		
+		System.out.println(candidates);
 		return candidates;
 	}
 	
