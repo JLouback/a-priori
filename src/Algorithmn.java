@@ -13,9 +13,9 @@ public class Algorithmn {
 
 	private String data;
 	private float min_sup;
-	private int min_conf;
+	private float min_conf;
 	
-	public Algorithmn(String data, float min_sup, int min_conf) {
+	public Algorithmn(String data, float min_sup, float min_conf) {
 		this.data = data;
 		this.min_sup = min_sup;
 		this.min_conf = min_conf;
