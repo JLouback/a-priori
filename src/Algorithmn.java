@@ -25,20 +25,22 @@ public class Algorithmn {
 		this.min_conf = min_conf;
 	}
 	
-	public boolean validJoin(Itemset p, Itemset q, int k) {
+	public boolean validJoin(Itemset p, Itemset q) {
+		int i;
+		
 		// Check if first k-2 elements are the same;
-		for (int i = 0; i < k-2; i++)
+		for (i = 0; i < p.items.size()-1; i++)
 			if (!p.items.get(i).equals(q.items.get(i))) 
 				return false;
 		
 		// Check if p.k-1 < q.k-1 lexicographically.
-		if (p.items.get(k-2).compareTo(q.items.get(k-2)) >= 0) 
+		if (p.items.get(i).compareTo(q.items.get(i)) >= 0) 
 			return false;
 		
 		return true;
 	}
 	
-	public TreeSet<Itemset> join(TreeSet<Itemset> itemsets, int k) {
+	public TreeSet<Itemset> join(TreeSet<Itemset> itemsets) {
 		TreeSet<Itemset> candidates = new TreeSet<Itemset>();
 		
 		Iterator<Itemset> it = itemsets.iterator(); 
@@ -47,7 +49,7 @@ public class Algorithmn {
 			Iterator<Itemset> it2 = itemsets.tailSet(p).iterator();
 			while (it2.hasNext()) {
 				Itemset q = it2.next();
-				if (validJoin(p, q, k))
+				if (validJoin(p, q))
 					candidates.add(new Itemset(p, q));
 			}
 		}
@@ -71,7 +73,7 @@ public class Algorithmn {
 	}
 	
 	public TreeSet<Itemset> aprioriGen(TreeSet<Itemset> itemsets, int k) {
-		TreeSet<Itemset> candidates = join(itemsets, k);
+		TreeSet<Itemset> candidates = join(itemsets);
 		return prune(itemsets, candidates, k);
 	}
 	
