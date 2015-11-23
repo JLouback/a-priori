@@ -11,9 +11,10 @@ import java.util.TreeSet;
 
 public class Algorithmn {
 
-	private String data;
-	private float min_sup;
-	private float min_conf;
+	private String data;		// The data file
+	private int num_t;			// The # of transactions
+	private float min_sup;		// The minimum support threshold
+	private float min_conf;		// The minimum confidence threshold
 	
 	public Algorithmn(String data, float min_sup, float min_conf) {
 		this.data = data;
@@ -24,10 +25,10 @@ public class Algorithmn {
 	public boolean validJoin(Itemset p, Itemset q, int k) {
 		// Check if first k-2 elements are the same;
 		for (int i=0; i<k-1; i++) {
-			if (!p.itemset.get(i).equals(q.itemset.get(i))) return false;
+			if (!p.items.get(i).equals(q.items.get(i))) return false;
 		}
 		// Check if p.k-1 < q.k-1 lexicographically.
-		if (p.itemset.get(k-2).compareTo(q.itemset.get(k-2)) > 0) return false;
+		if (p.items.get(k-2).compareTo(q.items.get(k-2)) > 0) return false;
 		return true;
 	}
 	
@@ -42,7 +43,7 @@ public class Algorithmn {
 				Itemset q = it2.next();
 				if (validJoin(p, q, k)) {
 					candidate = p;
-					candidate.itemset.add(q.itemset.get(k-2));
+					candidate.items.add(q.items.get(k-2));
 					candidates.add(candidate);
 				}
 			}
@@ -69,14 +70,15 @@ public class Algorithmn {
 		return prune(itemsets, candidates, k);
 	}
 	
-	public TreeSet<Itemset> firstItemset() throws IOException {
+	private TreeSet<Itemset> firstItemset() throws IOException {
+		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
-		HashMap<String, Integer> counts = Utils.termCount(data);
-		for (String term : counts.keySet()) {
-			if (counts.get(term) > min_sup) {
+		
+		this.num_t = Utils.termCount(data, counts);
+		for (String term : counts.keySet())
+			if ((float)counts.get(term) / this.num_t >= min_sup)
 				singlesets.add(new Itemset(term, counts.get(term)));
-			}
-		}
+		
 		return singlesets;
 	}
 	
@@ -100,7 +102,7 @@ public class Algorithmn {
 		try {
 		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("outptu.txt", true)));
 		    for (Itemset set : itemsets) {
-		    	out.println(set.itemset.toString());
+		    	out.println(set.items.toString());
 		    }
 		    out.close();
 		} catch (IOException e) {
@@ -110,6 +112,12 @@ public class Algorithmn {
 
 	public void execute() throws IOException{
 		TreeSet<Itemset> L1 = firstItemset();
+		
+		/* Begin Debugging - shows items in L1 */
+		for (Itemset item: L1)
+			System.out.println(item);
+		/* End Debugging */
+		
 		TreeSet<Itemset> previous = L1;
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));  
 		String line = null;  

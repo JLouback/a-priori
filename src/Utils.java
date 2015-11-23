@@ -6,11 +6,21 @@ import java.util.HashMap;
 
 public class Utils {
 
-	public static HashMap<String, Integer> termCount(String data) throws IOException {
-		HashMap<String, Integer> counts = new HashMap<String, Integer>();
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));  
-		String line = null;  
+	/*
+	 * @param data: The filename with the data
+	 * @param counts: A hash map for the term=>count data
+	 * @return numTransactions: The number of transactions in the file
+	 * 
+	 * For each comma separated term in the file data, populate counts with the number of
+	 * times that it occurs. Return the total number of transactions in data.
+	 */
+	public static int termCount(String data, HashMap<String, Integer> counts) throws IOException {
+		int numTransactions = 0;
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));
+		String line = null;
+
 		while ((line = br.readLine()) != null)  {
+			numTransactions++;
 			String[] terms = line.split(",");
 			for (String term : terms) {
 				if (counts.containsKey(term)) {
@@ -22,6 +32,6 @@ public class Utils {
 		}
 		br.close();
 
-		return counts;
+		return numTransactions;
 	}
 }
