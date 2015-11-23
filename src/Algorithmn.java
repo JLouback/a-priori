@@ -5,9 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
+import java.util.ArrayList;
 
 public class Algorithmn {
 
@@ -70,18 +73,6 @@ public class Algorithmn {
 		return prune(itemsets, candidates, k);
 	}
 	
-	private TreeSet<Itemset> firstItemset() throws IOException {
-		HashMap<String, Integer> counts = new HashMap<String, Integer>();
-		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
-		
-		this.num_t = Utils.termCount(data, counts);
-		for (String term : counts.keySet())
-			if ((float)counts.get(term) / this.num_t >= min_sup)
-				singlesets.add(new Itemset(term, counts.get(term)));
-		
-		return singlesets;
-	}
-	
 	public TreeSet<Itemset> updateCounts(TreeSet<Itemset> candidates) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));  
 		String line = null; 
@@ -109,24 +100,89 @@ public class Algorithmn {
 		    //exception handling left as an exercise for the reader
 		}
 	}
+	
+	/*
+	 * Return the first itemset for the algorithm
+	 */
+	private TreeSet<Itemset> firstItemset() throws IOException {
+		HashMap<String, Integer> counts = new HashMap<String, Integer>();
+		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
+		
+		this.num_t = Utils.termCount(data, counts);
+		for (String term : counts.keySet())
+			if ((float)counts.get(term) / this.num_t >= min_sup)
+				singlesets.add(new Itemset(term, counts.get(term)));
+		
+		return singlesets;
+	}
+	
+	/*
+	 * @param items: A hashset representing the items for a transaction
+	 * @param itemset: The itemset being compared against items
+	 * 
+	 * Returns true if itemset.items is a subset of items, false otherwise.
+	 */
+	private boolean itemsContainsItemset(HashSet<String>items, Itemset itemset) {
+		for (String item: itemset.items)
+			if (!items.contains(item))
+				return false;
+		
+		return true;
+	}
+	
+	/*
+	 * @param transaction: A string representing the items in the transaction "A,B,C"
+	 * @param candidates: Candidate itemsets
+	 * 
+	 * Returns the candidate itemsets with items that are a subset of the items represented by transaction
+	 */
+	private TreeSet<Itemset> candidatesInTransaction(TreeSet<Itemset> candidates, String transaction) {
+		TreeSet<Itemset> candidates_t = new TreeSet<Itemset>();
+		HashSet<String> items = new HashSet<String>();
+		
+		// Create the hashset for the transaction's items
+		for (String item : transaction.split(","))
+			items.add(item);
+		
+		// Get the candidates supported by this transaction
+		for (Itemset itemset : candidates)
+			if (itemsContainsItemset(items, itemset))
+				candidates_t.add(itemset);
+		
+		return candidates_t;
+	}
 
 	public void execute() throws IOException{
-		TreeSet<Itemset> L1 = firstItemset();
+		ArrayList<TreeSet<Itemset>> L = new ArrayList<TreeSet<Itemset>>();
+		RandomAccessFile raf = new RandomAccessFile(this.data, "r");
+		TreeSet<Itemset> previous;
 		
-		/* Begin Debugging - shows items in L1 */
-		for (Itemset item: L1)
-			System.out.println(item);
-		/* End Debugging */
-		
-		TreeSet<Itemset> previous = L1;
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));  
-		String line = null;  
-		for (int k=2; !previous.isEmpty(); k++) {
+		L.add(firstItemset());
+		previous = L.get(0);
+		for (int k = 2; !previous.isEmpty(); k++) {
 			TreeSet<Itemset> candidates = aprioriGen(previous, k);
-			candidates = updateCounts(candidates);
-			candidates = pruneBySupport(candidates);
-			write(candidates);
-			previous = candidates;
+			TreeSet<Itemset> survivors = new TreeSet<Itemset>();
+			
+			// For each transaction, increment the support for itemsets that are a subset 
+			String transaction = null;
+			raf.seek(0);
+			while ((transaction = raf.readLine()) != null) {
+				TreeSet<Itemset> candidates_t = candidatesInTransaction(candidates, transaction);
+				for (Itemset itemset : candidates_t)
+					itemset.support++;
+			}
+			
+			// Only keep candidates that meet the support threshold
+			for (Itemset itemset : candidates)
+				if ((float)itemset.support / this.num_t >= this.min_sup)
+					survivors.add(itemset);
+			
+			L.add(survivors);
+			previous = survivors;
+			
+//			write(candidates);
 		}
+		
+		raf.close();
 	}
 }
