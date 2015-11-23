@@ -23,14 +23,13 @@ public class Itemset implements Comparable<Object> {
 			throw new ClassCastException("An Itemset object expected.");
 		
 		Itemset that = (Itemset)object;
-		if (this.items.size() < that.items.size())
-			return -1;
-		if (this.items.size() > that.items.size())
-			return 1;
 		
-		for (String item : this.items)
-			if (!that.items.contains(item))
-				return -1;
+		if (this.items.size() != that.items.size())
+			throw new IllegalStateException("You should not be comparing itemsets of different sizes.");
+		
+		for (int i = 0; i < this.items.size(); i++)
+			if (!this.items.get(i).equals(that.items.get(i)))
+				return this.items.get(i).compareTo(that.items.get(i));
 		
 		return 0;
 	}

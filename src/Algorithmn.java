@@ -27,17 +27,21 @@ public class Algorithmn {
 	
 	public boolean validJoin(Itemset p, Itemset q, int k) {
 		// Check if first k-2 elements are the same;
-		for (int i=0; i<k-1; i++) {
-			if (!p.items.get(i).equals(q.items.get(i))) return false;
-		}
+		for (int i = 0; i < k-2; i++)
+			if (!p.items.get(i).equals(q.items.get(i))) 
+				return false;
+		
 		// Check if p.k-1 < q.k-1 lexicographically.
-		if (p.items.get(k-2).compareTo(q.items.get(k-2)) > 0) return false;
+		if (p.items.get(k-2).compareTo(q.items.get(k-2)) >= 0) 
+			return false;
+		
 		return true;
 	}
 	
 	public TreeSet<Itemset> join(TreeSet<Itemset> itemsets, int k) {
 		TreeSet<Itemset> candidates = new TreeSet<Itemset>();
 		Itemset candidate;
+		
 		Iterator<Itemset> it = itemsets.iterator(); 
 		while (it.hasNext()) {
 			Itemset p = it.next();
@@ -45,9 +49,12 @@ public class Algorithmn {
 			while (it2.hasNext()) {
 				Itemset q = it2.next();
 				if (validJoin(p, q, k)) {
+					System.out.println("Valid join:");
+					System.out.println("\t" + p);
+					System.out.println("\t" + q);
 					candidate = p;
-					candidate.items.add(q.items.get(k-2));
-					candidates.add(candidate);
+					// candidate.items.add(q.items.get(k-2));
+					// candidates.add(candidate);
 				}
 			}
 		}
@@ -91,7 +98,7 @@ public class Algorithmn {
 	
 	public void write(TreeSet<Itemset> itemsets) {
 		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("outptu.txt", true)));
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("output.txt", true)));
 		    for (Itemset set : itemsets) {
 		    	out.println(set.items.toString());
 		    }
@@ -184,5 +191,6 @@ public class Algorithmn {
 		}
 		
 		raf.close();
+		System.out.println("Done");
 	}
 }
