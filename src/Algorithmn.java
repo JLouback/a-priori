@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 public class Algorithmn {
 
-	private String data;		// The data file
-	private int num_t;			// The # of transactions
-	private float min_sup;		// The minimum support threshold
-	private float min_conf;		// The minimum confidence threshold
+	private String data;		/* The data file */
+	private int num_t;			/* The # of transactions */
+	private float min_sup;		/* The minimum support threshold */
+	private float min_conf;		/* The minimum confidence threshold */
 	
 	public Algorithmn(String data, float min_sup, float min_conf) {
 		this.data = data;
@@ -121,11 +121,11 @@ public class Algorithmn {
 		TreeSet<Itemset> candidates_t = new TreeSet<Itemset>();
 		HashSet<String> items = new HashSet<String>();
 		
-		// Create the hashset for the transaction's items
+		/* Create the hashset for the transaction's items */
 		for (String item : transaction.split(","))
 			items.add(item);
 		
-		// Get the candidates supported by this transaction
+		/* Get the candidates supported by this transaction */
 		for (Itemset itemset : candidates)
 			if (itemsContainsItemset(items, itemset))
 				candidates_t.add(itemset);
@@ -164,7 +164,7 @@ public class Algorithmn {
 			TreeSet<Itemset> candidates = aprioriGen(previous, k);
 			TreeSet<Itemset> survivors = new TreeSet<Itemset>();
 			
-			// For each transaction, increment the support for itemsets that are a subset 
+			/* For each transaction, increment the support for itemsets that are a subset */ 
 			String transaction = null;
 			raf.seek(0);
 			while ((transaction = raf.readLine()) != null) {
@@ -173,7 +173,7 @@ public class Algorithmn {
 					itemset.support++;
 			}
 			
-			// Only keep candidates that meet the support threshold
+			/* Only keep candidates that meet the support threshold */
 			for (Itemset itemset : candidates)
 				if ((float)itemset.support / this.num_t >= this.min_sup)
 					survivors.add(itemset);
@@ -183,9 +183,7 @@ public class Algorithmn {
 		}
 		raf.close();
 		
-		writeFrequentItemsets(L);
-		System.out.println(L.get(L.size()-2));
-		
+		writeFrequentItemsets(L);		
 		System.out.println("Done");
 	}
 }
