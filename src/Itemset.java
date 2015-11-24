@@ -23,6 +23,12 @@ public class Itemset implements Comparable<Object> {
 		this.items.add(q.items.get(q.items.size()-1));
 		this.support = 0;
 	}
+	
+	public Itemset(Itemset orig) {
+		this.items = new ArrayList<String>();
+		this.items.addAll(orig.items);
+		this.support = 0;
+	}
 
 	public void setSupport(int support) {
 		this.support = support;

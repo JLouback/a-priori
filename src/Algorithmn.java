@@ -54,43 +54,35 @@ public class Algorithmn {
 			}
 		}
 		
-		System.out.println(candidates);
 		return candidates;
 	}
 	
-	public boolean containsSubsets(TreeSet<Itemset> itemsets, Itemset candidate, int k) {
-		
-		return false;
+	public boolean containsAllSubsets(TreeSet<Itemset> itemsets, Itemset grown_candidate) {
+		for (int i = 0; i < grown_candidate.items.size(); i++) {
+			String removed = grown_candidate.items.remove(i);
+			if (!itemsets.contains(grown_candidate))
+				return false;
+			grown_candidate.items.add(i, removed);
+		}
+
+		return true;
 	}
 	
-	public TreeSet<Itemset> prune(TreeSet<Itemset> itemsets, TreeSet<Itemset>candidates, int k) {
-		for (Itemset candidate : candidates) {
-			if (!containsSubsets(itemsets, candidate, k)) {
-				candidates.remove(candidate);
+	public TreeSet<Itemset> prune(TreeSet<Itemset> itemsets, TreeSet<Itemset> grown_candidates) {
+		TreeSet<Itemset> survivors = new TreeSet<Itemset>();
+		for (Itemset grown_candidate : grown_candidates) {
+			if (containsAllSubsets(itemsets, grown_candidate)) {
+				System.out.println("Survivor: " + grown_candidate);
+				survivors.add(grown_candidate);
 			}
 		}
-		return candidates;
+
+		return survivors;
 	}
 	
 	public TreeSet<Itemset> aprioriGen(TreeSet<Itemset> itemsets, int k) {
 		TreeSet<Itemset> candidates = join(itemsets);
-		return prune(itemsets, candidates, k);
-	}
-	
-	public TreeSet<Itemset> updateCounts(TreeSet<Itemset> candidates) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));  
-		String line = null; 
-		while ((line = br.readLine()) != null)  {
-			
-		}
-		return null;
-	}
-	
-	public TreeSet<Itemset> pruneBySupport(TreeSet<Itemset> candidates) {
-		for (Itemset candidate : candidates) {
-			if (candidate.support < min_sup) candidates.remove(candidate);
-		}
-		return candidates;
+		return prune(itemsets, candidates);
 	}
 	
 	public void write(TreeSet<Itemset> itemsets) {
@@ -186,8 +178,9 @@ public class Algorithmn {
 			
 //			write(candidates);
 		}
-		
 		raf.close();
+		System.out.println(L.get(L.size()-2));
+		
 		System.out.println("Done");
 	}
 }
