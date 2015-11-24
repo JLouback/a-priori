@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
@@ -85,18 +82,6 @@ public class Algorithmn {
 		return prune(itemsets, candidates);
 	}
 	
-	public void write(TreeSet<Itemset> itemsets) {
-		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("output.txt", true)));
-		    for (Itemset set : itemsets) {
-		    	out.println(set.items.toString());
-		    }
-		    out.close();
-		} catch (IOException e) {
-		    //exception handling left as an exercise for the reader
-		}
-	}
-	
 	/*
 	 * Return the first itemset for the algorithm
 	 */
@@ -147,7 +132,27 @@ public class Algorithmn {
 		
 		return candidates_t;
 	}
+	
+	/*
+	 * Writes the frequent itemsets section of the output
+	 */
+	public void writeFrequentItemsets(ArrayList<TreeSet<Itemset>> L) {
+		try {
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("output.txt", true)));
+		    
+		    out.println("==Frequent itemsets (min_sup=" + (int)(min_sup*100) + "%)");
+		    for (TreeSet<Itemset> treeSet : L)
+		    	for (Itemset itemset : treeSet)
+		    		out.println(itemset.items.toString() + ", " + (int)((float)itemset.support / num_t * 100) + "%");
 
+		    out.close();
+		} catch (IOException e) {
+		}
+	}
+
+	/*
+	 * Follows the main algorithm of Section 2.1 in the referenced paper
+	 */
 	public void execute() throws IOException{
 		ArrayList<TreeSet<Itemset>> L = new ArrayList<TreeSet<Itemset>>();
 		RandomAccessFile raf = new RandomAccessFile(this.data, "r");
@@ -175,10 +180,10 @@ public class Algorithmn {
 			
 			L.add(survivors);
 			previous = survivors;
-			
-//			write(candidates);
 		}
 		raf.close();
+		
+		writeFrequentItemsets(L);
 		System.out.println(L.get(L.size()-2));
 		
 		System.out.println("Done");
