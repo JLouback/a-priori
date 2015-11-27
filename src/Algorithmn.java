@@ -3,6 +3,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -149,6 +151,65 @@ public class Algorithmn {
 		} catch (IOException e) {
 		}
 	}
+	
+	/*
+	 * @param rules: A list to add rules to as they are discovered
+	 * @param itemset: The frequent itemset we are using to discover rules
+	 * @param raf: The file with the dataset
+	 */
+	private void addConfidentRules(ArrayList<Rule> rules, Itemset itemset, RandomAccessFile raf) throws IOException {
+		if (itemset.items.size() <= 1)
+			return;
+		
+		ArrayList<String> lhs = new ArrayList<String>(itemset.items);
+		for (int i = 0; i < itemset.items.size(); i++) {
+			String rhs = lhs.remove(i);
+			float numSupporting = 0;
+			float total = 0;
+			
+			String transaction = null;
+			raf.seek(0);
+			while ((transaction = raf.readLine()) != null) {
+				String[] items = transaction.split(",");
+				boolean isRelevant = true;
+				
+				for (String item : lhs) {
+					if (Arrays.binarySearch(items, item) < 0) {
+						isRelevant = false;
+						break;
+					}
+				}
+				
+				if (!isRelevant)
+					continue;
+				
+				total++;
+				if (Arrays.binarySearch(items, rhs) >= 0)
+					numSupporting++;
+			}
+			
+			if (numSupporting / total >= this.min_conf)
+				rules.add(new Rule(lhs, rhs));
+			
+			lhs.add(i, rhs);
+		}
+	}
+	
+	/*
+	 * @param L: The levels from the iterations when computing the frequent itemsets
+	 * @param raf: the file with the dataset
+	 * 
+	 * Returns a list of associative rules >= min_conf
+	 */
+	private ArrayList<Rule> getRules(ArrayList<TreeSet<Itemset>> L, RandomAccessFile raf) throws IOException {
+		ArrayList<Rule> rules = new ArrayList<Rule>();
+		
+		for (TreeSet<Itemset> treeset : L)
+			for (Itemset itemset : treeset)
+				addConfidentRules(rules, itemset, raf);
+		
+		return rules;
+	}
 
 	/*
 	 * Follows the main algorithm of Section 2.1 in the referenced paper
@@ -164,7 +225,7 @@ public class Algorithmn {
 			TreeSet<Itemset> candidates = aprioriGen(previous, k);
 			TreeSet<Itemset> survivors = new TreeSet<Itemset>();
 			
-			/* For each transaction, increment the support for itemsets that are a subset */ 
+			/* For each transaction, increment the support for itemsets that are a subset */
 			String transaction = null;
 			raf.seek(0);
 			while ((transaction = raf.readLine()) != null) {
@@ -181,9 +242,12 @@ public class Algorithmn {
 			L.add(survivors);
 			previous = survivors;
 		}
+		writeFrequentItemsets(L);
+		
+		ArrayList<Rule> rules = getRules(L, raf);
+		System.out.println(rules);
 		raf.close();
 		
-		writeFrequentItemsets(L);		
 		System.out.println("Done");
 	}
 }
