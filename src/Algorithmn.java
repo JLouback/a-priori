@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,18 +40,22 @@ public class Algorithmn {
 	
 	public TreeSet<Itemset> join(TreeSet<Itemset> itemsets) {
 		TreeSet<Itemset> candidates = new TreeSet<Itemset>();
-		
 		Iterator<Itemset> it = itemsets.iterator(); 
+		Itemset candidate = null;
 		while (it.hasNext()) {
 			Itemset p = it.next();
 			Iterator<Itemset> it2 = itemsets.tailSet(p).iterator();
 			while (it2.hasNext()) {
 				Itemset q = it2.next();
-				if (validJoin(p, q))
-					candidates.add(new Itemset(p, q));
+				if (validJoin(p, q)) {
+					candidate = new Itemset(p, q);
+					candidate.support = Utils.itemsetCount(data, candidate.items);
+					/* Ignore item sets with support less than required */
+					if (candidate.support >= min_sup)
+						candidates.add(candidate);
+				}
 			}
 		}
-		
 		return candidates;
 	}
 	
@@ -88,12 +91,12 @@ public class Algorithmn {
 	 * Return the first itemset for the algorithm
 	 */
 	private TreeSet<Itemset> firstItemset() throws IOException {
-		HashMap<String, Integer> counts = new HashMap<String, Integer>();
+		HashMap<String, Float> counts = new HashMap<String, Float>();
 		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
 		
-		this.num_t = Utils.termCount(data, counts);
+		Utils.termCount(data, counts);
 		for (String term : counts.keySet())
-			if ((float)counts.get(term) / this.num_t >= min_sup)
+			if (counts.get(term) >= min_sup)
 				singlesets.add(new Itemset(term, counts.get(term)));
 		
 		return singlesets;
@@ -114,28 +117,6 @@ public class Algorithmn {
 	}
 	
 	/*
-	 * @param transaction: A string representing the items in the transaction "A,B,C"
-	 * @param candidates: Candidate itemsets
-	 * 
-	 * Returns the candidate itemsets with items that are a subset of the items represented by transaction
-	 */
-	private TreeSet<Itemset> candidatesInTransaction(TreeSet<Itemset> candidates, String transaction) {
-		TreeSet<Itemset> candidates_t = new TreeSet<Itemset>();
-		HashSet<String> items = new HashSet<String>();
-		
-		/* Create the hashset for the transaction's items */
-		for (String item : transaction.split(","))
-			items.add(item);
-		
-		/* Get the candidates supported by this transaction */
-		for (Itemset itemset : candidates)
-			if (itemsContainsItemset(items, itemset))
-				candidates_t.add(itemset);
-		
-		return candidates_t;
-	}
-	
-	/*
 	 * Writes the frequent itemsets section of the output
 	 */
 	public void writeFrequentItemsets(ArrayList<TreeSet<Itemset>> L) {
@@ -145,7 +126,7 @@ public class Algorithmn {
 		    out.println("==Frequent itemsets (min_sup=" + (int)(min_sup*100) + "%)");
 		    for (TreeSet<Itemset> treeSet : L)
 		    	for (Itemset itemset : treeSet)
-		    		out.println(itemset.items.toString() + ", " + (int)((float)itemset.support / num_t * 100) + "%");
+		    		out.println(itemset.items.toString() + ", " + itemset.support*100 + "%");
 
 		    out.close();
 		} catch (IOException e) {
@@ -201,7 +182,8 @@ public class Algorithmn {
 	 * 
 	 * Returns a list of associative rules >= min_conf
 	 */
-	private ArrayList<Rule> getRules(ArrayList<TreeSet<Itemset>> L, RandomAccessFile raf) throws IOException {
+	private ArrayList<Rule> getRules(ArrayList<TreeSet<Itemset>> L) throws IOException {
+		RandomAccessFile raf = new RandomAccessFile(this.data, "r");
 		ArrayList<Rule> rules = new ArrayList<Rule>();
 		
 		for (TreeSet<Itemset> treeset : L)
@@ -216,37 +198,19 @@ public class Algorithmn {
 	 */
 	public void execute() throws IOException{
 		ArrayList<TreeSet<Itemset>> L = new ArrayList<TreeSet<Itemset>>();
-		RandomAccessFile raf = new RandomAccessFile(this.data, "r");
 		TreeSet<Itemset> previous;
 		
 		L.add(firstItemset());
 		previous = L.get(0);
 		for (int k = 2; !previous.isEmpty(); k++) {
 			TreeSet<Itemset> candidates = aprioriGen(previous, k);
-			TreeSet<Itemset> survivors = new TreeSet<Itemset>();
-			
-			/* For each transaction, increment the support for itemsets that are a subset */
-			String transaction = null;
-			raf.seek(0);
-			while ((transaction = raf.readLine()) != null) {
-				TreeSet<Itemset> candidates_t = candidatesInTransaction(candidates, transaction);
-				for (Itemset itemset : candidates_t)
-					itemset.support++;
-			}
-			
-			/* Only keep candidates that meet the support threshold */
-			for (Itemset itemset : candidates)
-				if ((float)itemset.support / this.num_t >= this.min_sup)
-					survivors.add(itemset);
-			
-			L.add(survivors);
-			previous = survivors;
+			L.add(candidates);
+			previous = candidates;
 		}
 		writeFrequentItemsets(L);
 		
-		ArrayList<Rule> rules = getRules(L, raf);
+		ArrayList<Rule> rules = getRules(L);
 		System.out.println(rules);
-		raf.close();
 		
 		System.out.println("Done");
 	}

@@ -3,9 +3,9 @@ import java.util.ArrayList;
 public class Itemset implements Comparable<Object> {
 
 	protected ArrayList<String> items;
-	protected int support;
+	protected float support;
 
-	public Itemset(String item, int support) {
+	public Itemset(String item, float support) {
 		this.items = new ArrayList<String>();
 		this.items.add(item);
 		this.support = support;
