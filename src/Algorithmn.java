@@ -91,12 +91,9 @@ public class Algorithmn {
 	public TreeSet<Itemset> prune(TreeSet<Itemset> itemsets, TreeSet<Itemset> grown_candidates) {
 		TreeSet<Itemset> survivors = new TreeSet<Itemset>();
 
-		for (Itemset grown_candidate : grown_candidates) {
-			if (containsAllSubsets(itemsets, grown_candidate)) {
-				System.out.println("Survivor: " + grown_candidate);
+		for (Itemset grown_candidate : grown_candidates)
+			if (containsAllSubsets(itemsets, grown_candidate))
 				survivors.add(grown_candidate);
-			}
-		}
 
 		return survivors;
 	}
