@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 public class Algorithmn {
 
 	private String data;		/* The data file */
-	private int num_t;			/* The # of transactions */
 	private float min_sup;		/* The minimum support threshold */
 	private float min_conf;		/* The minimum confidence threshold */
 	
@@ -42,6 +40,7 @@ public class Algorithmn {
 		TreeSet<Itemset> candidates = new TreeSet<Itemset>();
 		Iterator<Itemset> it = itemsets.iterator(); 
 		Itemset candidate = null;
+
 		while (it.hasNext()) {
 			Itemset p = it.next();
 			Iterator<Itemset> it2 = itemsets.tailSet(p).iterator();
@@ -49,13 +48,14 @@ public class Algorithmn {
 				Itemset q = it2.next();
 				if (validJoin(p, q)) {
 					candidate = new Itemset(p, q);
-					candidate.support = Utils.itemsetCount(data, candidate.items);
+					candidate.support = Utils.itemsetSupport(data, candidate.items);
 					/* Ignore item sets with support less than required */
 					if (candidate.support >= min_sup)
 						candidates.add(candidate);
 				}
 			}
 		}
+
 		return candidates;
 	}
 	
@@ -72,6 +72,7 @@ public class Algorithmn {
 	
 	public TreeSet<Itemset> prune(TreeSet<Itemset> itemsets, TreeSet<Itemset> grown_candidates) {
 		TreeSet<Itemset> survivors = new TreeSet<Itemset>();
+
 		for (Itemset grown_candidate : grown_candidates) {
 			if (containsAllSubsets(itemsets, grown_candidate)) {
 				System.out.println("Survivor: " + grown_candidate);
@@ -100,20 +101,6 @@ public class Algorithmn {
 				singlesets.add(new Itemset(term, counts.get(term)));
 		
 		return singlesets;
-	}
-	
-	/*
-	 * @param items: A hashset representing the items for a transaction
-	 * @param itemset: The itemset being compared against items
-	 * 
-	 * Returns true if itemset.items is a subset of items, false otherwise.
-	 */
-	private boolean itemsContainsItemset(HashSet<String>items, Itemset itemset) {
-		for (String item: itemset.items)
-			if (!items.contains(item))
-				return false;
-		
-		return true;
 	}
 	
 	/*

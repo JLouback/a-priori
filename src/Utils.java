@@ -31,9 +31,11 @@ public class Utils {
 				}
 			}
 		}
+		
 		for (String term : counts.keySet()) {
 			counts.put(term, (counts.get(term)/numTransactions));
 		}
+		
 		br.close();
 	}
 	
@@ -45,11 +47,12 @@ public class Utils {
 	 * For each comma separated term in the file data, verify the occurrence of all elements
 	 * in itemset, return total occurrences.
 	 */
-	public static float itemsetCount(String data, ArrayList<String> itemset) {
+	public static float itemsetSupport(String data, ArrayList<String> itemset) {
 		int count = 0;
 		int total = 0;
 		String line = null;
 		boolean containsAll;
+		
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));
 			while ((line = br.readLine()) != null)  {
