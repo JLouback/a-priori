@@ -2,8 +2,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.RandomAccessFile;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,13 +16,11 @@ public class Algorithmn {
 	 */
 	private Map<String, BitSet> invertedBitSets;
 	
-	private String data;		/* The data file */
 	private double num_trans;   /* The number of transactions */
 	private float min_sup;		/* The minimum support threshold */
 	private float min_conf;		/* The minimum confidence threshold */
 	
 	public Algorithmn(String data, float min_sup, float min_conf) throws IOException {
-		this.data = data;
 		this.min_sup = min_sup;
 		this.min_conf = min_conf;
 		this.invertedBitSets = new HashMap<String, BitSet>();
@@ -153,7 +149,7 @@ public class Algorithmn {
 	 * @param itemset: The frequent itemset we are using to discover rules
 	 * @param raf: The file with the dataset
 	 */
-	private void addConfidentRules(ArrayList<Rule> rules, Itemset itemset, RandomAccessFile raf) throws IOException {
+	private void addConfidentRules(ArrayList<Rule> rules, Itemset itemset) {
 		if (itemset.items.size() <= 1)
 			return;
 		
@@ -162,27 +158,19 @@ public class Algorithmn {
 			String rhs = lhs.remove(i);
 			float numSupporting = 0;
 			float total = 0;
+			BitSet lhs_bs = new BitSet((int)num_trans);
+			BitSet rhs_bs = new BitSet((int)num_trans);
 			
-			String transaction = null;
-			raf.seek(0);
-			while ((transaction = raf.readLine()) != null) {
-				String[] items = transaction.split(",");
-				boolean isRelevant = true;
-				
-				for (String item : lhs) {
-					if (Arrays.binarySearch(items, item) < 0) {
-						isRelevant = false;
-						break;
-					}
-				}
-				
-				if (!isRelevant)
-					continue;
-				
-				total++;
-				if (Arrays.binarySearch(items, rhs) >= 0)
-					numSupporting++;
-			}
+			/* Initialize the bit sets */
+			lhs_bs.set(0, (int)num_trans);
+			rhs_bs.or(invertedBitSets.get(rhs));
+			
+			for (String str : lhs)
+				lhs_bs.and(invertedBitSets.get(str));
+			
+			total = lhs_bs.cardinality();
+			lhs_bs.and(rhs_bs);
+			numSupporting = lhs_bs.cardinality(); 
 			
 			if (numSupporting / total >= this.min_conf)
 				rules.add(new Rule(lhs, rhs));
@@ -193,17 +181,15 @@ public class Algorithmn {
 	
 	/*
 	 * @param L: The levels from the iterations when computing the frequent itemsets
-	 * @param raf: the file with the dataset
 	 * 
 	 * Returns a list of associative rules >= min_conf
 	 */
-	private ArrayList<Rule> getRules(ArrayList<TreeSet<Itemset>> L) throws IOException {
-		RandomAccessFile raf = new RandomAccessFile(this.data, "r");
+	private ArrayList<Rule> getRules(ArrayList<TreeSet<Itemset>> L) {
 		ArrayList<Rule> rules = new ArrayList<Rule>();
 		
 		for (TreeSet<Itemset> treeset : L)
 			for (Itemset itemset : treeset)
-				addConfidentRules(rules, itemset, raf);
+				addConfidentRules(rules, itemset);
 		
 		return rules;
 	}
