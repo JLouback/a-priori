@@ -59,10 +59,10 @@ Algorithm.execute()
       It verifies if all the possible subsets of Itemsets obtained in round
       k are present in the set of Itemsets of round k-1, removing those which
       don’t pass the verification from the return set.
-  2.3 Return the set of Itemsets that ‘survived’ the prune() method.
+  2.3 Return the set of Itemsets that ‘survived’ step 2.2.
 
 3. Run writeFrequentItemsets() to write to output.txt the Itemsets that have
-   sufficient support, contained in list L returned by aprioriGen().
+   sufficient support, contained in list L returned by step 2.
 
 4 Run getRules() to generate a list of Rule objects for the Itemsets in L, 
   filtering Rules that don’t meet confidence requirements:
@@ -75,7 +75,7 @@ Algorithm.execute()
       save the Rule (with its respective support and confidence) to the return list.
 
 5 Run writeRules() to write to output.txt the association rules found in the data that
-  adhere to the specified confidence and support requirements, returned on step 4
+  adhere to the specified confidence and support requirements, returned on step 4.
 	
 
 SAMPLE RUN
