@@ -1,0 +1,32 @@
+----
+TEAM
+----
+
+
+-----
+FILES
+-----
+
+
+----------
+HOW TO RUN
+----------
+
+
+--------
+OVERVIEW
+--------
+
+Instead of re-scanning each row (transaction) to determine which / how many of
+them contain a given itemset, we begin our program by creating a bit vector for
+each term we encounter in the dataset. The bit vector denotes which transactions
+contain a given term, which we can then AND with bit vectors of other terms to
+determine how many transactions contain the relevant items. For example, assume
+we have four transactions. If item A has a bit vector of 1101 and item B has a
+bit vector of 1011, then AND'ing the two together gives us 1001. This implies
+that transactions 1 and 4 contain both A and B. Given that these bitwise
+operations are extremely fast, this improved the running time of our algorithm
+dramatically. And since the calculations for support and confidence essentially
+involves getting the total number of times certain itemsets appear in different
+transactions, all we have to do is count the number of 1s in the bit vector
+(also extremely fast) once we're done with our operations.
