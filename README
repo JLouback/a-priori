@@ -31,7 +31,7 @@ Algorithm.execute()
   When initializing an Algorithm object with a given dataset, we initialize a
   HashMap with a term as key and a bit vector as value for each term we
   encounter in the dataset. The bit vector indicates which transactions contain
-  a given term. For example, assume we have four transactions. If item A has a bit
+  a given term. For example, assume we have four transactions. An item A has a bit
   vector of 1101 (indicating it is present in transactions 1, 2, and 4) and item
   B has a bit vector of 1011 (present in 1, 3 and 4). The AND of bit vector A and
   bit vector B gives us 1001. This implies that transactions 1 and 4 contain both
