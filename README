@@ -44,8 +44,8 @@ Algorithm.execute()
   Itemset object with the calculated support and the term; only Itemsets with
   sufficient support are returned in a set.
 
-2 Run aprioriGen() incrementing k until the set of rules of size k is
-  empty, storing the set of Itemsets at each iteration in a list L:
+2 Run aprioriGen() incrementing k until the set of Itemsets with k items is empty,
+  storing the set of Itemsets at each iteration in a list L:
   2.1 join() on round k of aprioriGen(), join receives the set of Itemset objects
       obtained on round k-1. This method attemps to join Itemset p from the set
       with all the Itemsets ahead of p (in lexicographical order of items in the 	
@@ -57,25 +57,25 @@ Algorithm.execute()
       greater than or equal to the threshold, it is added to the return set.
   2.2 prune() receives two sets of Itemsets, that of round k-1 and round k.
       It verifies if all the possible subsets of Itemsets obtained in round
-      k are present in the set of Itemsets of round k-1, removing those which don’t
-      pass the verification from the return set.
+      k are present in the set of Itemsets of round k-1, removing those which
+      don’t pass the verification from the return set.
   2.3 Return the set of Itemsets that ‘survived’ the prune() method.
 
-3. Run writeFrequentItemsets() to write to output.txt the Itemsets that have sufficient
-   support, contained in list L returned by aprioriGen().
+3. Run writeFrequentItemsets() to write to output.txt the Itemsets that have
+   sufficient support, contained in list L returned by aprioriGen().
 
-4 Run getRules() to generate a list of Rule objects for the Itemsets in L, calculating
-  the confidence and filtering Rules that don’t meet confidence requirements:
-  For each Itemset x in the list L of candidate item sets, for each possible combination
-  (n choose 1), create a Rule with 1 item of x on the RHS and all the other items of x
-  on the LHS:
+4 Run getRules() to generate a list of Rule objects for the Itemsets in L, 
+  filtering Rules that don’t meet confidence requirements:
+  For each Itemset x in the list L of candidate item sets, for each possible n
+  choose 1 combination, create a Rule with 1 item of x on the RHS and all the other
+  items of x on the LHS:
   4.1 Calculate the confidence of the Rule: (the cardinality of an AND of all bit
-      vectors for items in the LHS and RHS) divided by (the cardinality of an AND of
-      all bit vectors for items in the LHS). If the confidence is sufficient, save
-      the Rule (with its respective support and confidence) to the return list.
+      vectors for items in the LHS and RHS) divided by (the cardinality of an AND
+      of all bit vectors for items in the LHS). If the confidence is sufficient,
+      save the Rule (with its respective support and confidence) to the return list.
 
-5 Run writeRules() to write to output.txt the association rules found in the dataset
-  that adhere to the specified confidence and support requirements, returned on step 4
+5 Run writeRules() to write to output.txt the association rules found in the data that
+  adhere to the specified confidence and support requirements, returned on step 4
 	
 
 SAMPLE RUN
