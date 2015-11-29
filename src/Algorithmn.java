@@ -46,7 +46,17 @@ public class Algorithmn {
 		return true;
 	}
 	
-	public TreeSet<Itemset> join(TreeSet<Itemset> itemsets) {
+	private float getItemsetSupport(ArrayList<String> items) {
+		BitSet union = new BitSet((int) this.num_trans);
+		union.set(0, (int)this.num_trans);
+		
+		for (String str : items)
+			union.and(this.invertedBitSets.get(str));
+		
+		return (float) (union.cardinality() / this.num_trans);
+	}
+	
+	private TreeSet<Itemset> join(TreeSet<Itemset> itemsets) {
 		TreeSet<Itemset> candidates = new TreeSet<Itemset>();
 		Iterator<Itemset> it = itemsets.iterator(); 
 		Itemset candidate = null;
@@ -58,7 +68,7 @@ public class Algorithmn {
 				Itemset q = it2.next();
 				if (validJoin(p, q)) {
 					candidate = new Itemset(p, q);
-					candidate.support = Utils.itemsetSupport(data, candidate.items);
+					candidate.support = getItemsetSupport(candidate.items);
 					/* Ignore item sets with support less than required */
 					if (candidate.support >= min_sup)
 						candidates.add(candidate);
