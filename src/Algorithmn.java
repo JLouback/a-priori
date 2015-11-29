@@ -4,21 +4,32 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.ArrayList;
 
 public class Algorithmn {
-
+	/*
+	 * A map of basket items to a bit vector representing the transactions
+	 * that item is present in.
+	 */
+	private Map<String, BitSet> invertedBitSets;
+	
 	private String data;		/* The data file */
+	private double num_trans;   /* The number of transactions */
 	private float min_sup;		/* The minimum support threshold */
 	private float min_conf;		/* The minimum confidence threshold */
 	
-	public Algorithmn(String data, float min_sup, float min_conf) {
+	public Algorithmn(String data, float min_sup, float min_conf) throws IOException {
 		this.data = data;
 		this.min_sup = min_sup;
 		this.min_conf = min_conf;
+		this.invertedBitSets = new HashMap<String, BitSet>();
+		this.num_trans = Utils.getInvertedBitSets(data, this.invertedBitSets);
+		System.out.println("Num of transactions " + this.num_trans);
 	}
 	
 	public boolean validJoin(Itemset p, Itemset q) {
