@@ -1,32 +1,83 @@
+GROUP INFORMATION
 ----
-TEAM
-----
+Juliana Louback (jl4354) & Anthony Dubis (ajd2194)
 
 
------
 FILES
 -----
+- Algorithmn.java - Contains the a-priori algorithm and rule generator- Interaction.java - Handles user interaction- Itemset.java - object for storing an item set and its respective support- Rule.java - object for storing a rule and its respective support and confidence- Utils.java - contains supportive method for BitSet manipulation
 
 
-----------
+DATA
+----
+
+
+
 HOW TO RUN
 ----------
+java -jar a-priori.jar <dataset file> <min_sup> <min_conf>
 
 
---------
-OVERVIEW
---------
 
-Instead of re-scanning each row (transaction) to determine which / how many of
-them contain a given itemset, we begin our program by creating a bit vector for
-each term we encounter in the dataset. The bit vector denotes which transactions
-contain a given term, which we can then AND with bit vectors of other terms to
-determine how many transactions contain the relevant items. For example, assume
-we have four transactions. If item A has a bit vector of 1101 and item B has a
-bit vector of 1011, then AND'ing the two together gives us 1001. This implies
-that transactions 1 and 4 contain both A and B. Given that these bitwise
-operations are extremely fast, this improved the running time of our algorithm
-dramatically. And since the calculations for support and confidence essentially
-involves getting the total number of times certain itemsets appear in different
-transactions, all we have to do is count the number of 1s in the bit vector
-(also extremely fast) once we're done with our operations.
+INTERNAL DESIGN
+---------------
+
+1. Interaction.java
+Receives the dataset file path, support and confidence thresholds from the
+command line and with it initializes an Algorithm object and calls execute().
+
+
+2. Algorithm.execute()
+2.1 Run firstItemset() to obtain a set of single term Itemsets (k=1) which make the
+    minimum support threshold:
+    When initializing an Algorithm object with a given dataset, we initialize a
+    HashMap with a term as key and a bit vector as value for each term we
+    encounter in the dataset. The bit vector indicates which transactions contain
+    a given term. For example, assume we have four transactions. If item A has a bit
+    vector of 1101 (indicating it is present in transactions 1, 2, and 4) and item
+    B has a bit vector of 1011 (present in 1, 3 and 4). The AND of bit vector A and
+    bit vector B gives us 1001. This implies that transactions 1 and 4 contain both
+    A and B. Given that these bitwise operations are extremely fast, this improved
+    the running time of our algorithm dramatically. And since the calculations for
+    support and confidence essentially involves getting the total number of times
+    certain itemsets appear in different transactions, all we have to do is count
+    the number of 1s in the bit vector once we're done with our operations.
+    In sum, firstItemset() counts the 1’s in each term’s bit vector and generates an    
+    Itemset object with the calculated support and the term; only Itemsets with
+    sufficient support are returned in a set.
+
+2.2 Run aprioriGen() incrementing k until the set of rules of size k is
+    empty, storing the set of Itemsets at each iteration in a list L:
+    2.2.1 join() on round k of aprioriGen(), join receives the set of Itemset objects
+          obtained on round k-1. This method attemps to join Itemset p from the set
+          with all the Itemsets ahead of p (in lexicographical order of items in the 		  Itemset). First two Itemsets, p and q, are verified in validJoin(): all k-2
+          first items must be the same and the k-1th item of p is before the k-1th 	
+	  item of q in lexicographic order. If valid, the support for the candidate 		  Itemset resulting from joining p and q - the items in p and the last
+	  item of q - is calculated (see 2.1 for details). If this support score is
+	  greater than or equal to the threshold, it is added to the return set.
+    2.2.2 prune() receives two sets of Itemsets, that of round k-1 and round k.
+	  It verifies if all the possible subsets of Itemsets obtained in round
+	  k are present in the set of Itemsets of round k-1, removing those which don’t
+	  pass the verification from the return set.
+    2.2.3 Return the set of Itemsets that ‘survived’ the prune() method.
+
+2.3 Run writeFrequentItemsets() to write to output.txt the Itemsets that have sufficient
+    support, contained in list L returned by aprioriGen().
+
+2.4 Run getRules() to generate a list of Rule objects for the Itemsets in L, calculating
+    the confidence and filtering Rules that don’t meet confidence requirements:
+    For each Itemset x in the list L of candidate item sets, for each possible combination
+    (n choose 1), create a Rule with 1 item of x on the RHS and all the other items of x
+    on the LHS:
+    2.4.1 Calculate the confidence of the Rule: (the cardinality of an AND of all bit
+	  vectors for items in the LHS and RHS) divided by (the cardinality of an AND of
+	  all bit vectors for items in the LHS). If the confidence is sufficient, save
+	  the Rule (with its respective support and confidence) to the return list.
+
+2.5 Run writeRules() to write to output.txt the association rules found in the dataset
+    that adhere to the specified confidence and support requirements, returned on step 2.4
+	
+
+SAMPLE RUN
+----------
+java -jar a-priori.jar <dataset file> <min_sup> <min_conf>

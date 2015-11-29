@@ -16,7 +16,7 @@ public class Algorithmn {
 	 * that item is present in.
 	 */
 	private Map<String, BitSet> invertedBitSets;
-	private final String kOutputFile = "output.txt";
+	private final String outputFile = "output.txt";
 	
 	private double num_trans;   /* The number of transactions */
 	private float min_sup;		/* The minimum support threshold */
@@ -28,7 +28,30 @@ public class Algorithmn {
 		this.invertedBitSets = new HashMap<String, BitSet>();
 		this.num_trans = Utils.getInvertedBitSets(data, this.invertedBitSets);
 	}
+
+	private HashMap<String, Float> singleTermsSupport() {
+		HashMap<String, Float> supports = new HashMap<String, Float>();
+		
+		for (String str : invertedBitSets.keySet())
+			supports.put(str, (float)(invertedBitSets.get(str).cardinality() / this.num_trans));
+		
+		return supports;
+	}
 	
+	/*
+	 * Return the first itemset for the algorithm
+	 */
+	private TreeSet<Itemset> firstItemset() throws IOException {
+		HashMap<String, Float> supports = singleTermsSupport();
+		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
+		
+		for (String term : supports.keySet())
+			if (supports.get(term) >= min_sup)
+				singlesets.add(new Itemset(term, supports.get(term)));
+		
+		return singlesets;
+	}
+
 	public boolean validJoin(Itemset p, Itemset q) {
 		int i;
 		
@@ -103,54 +126,17 @@ public class Algorithmn {
 		return prune(itemsets, candidates);
 	}
 	
-	private HashMap<String, Float> singleTermsSupport() {
-		HashMap<String, Float> supports = new HashMap<String, Float>();
-		
-		for (String str : invertedBitSets.keySet())
-			supports.put(str, (float)(invertedBitSets.get(str).cardinality() / this.num_trans));
-		
-		return supports;
-	}
-	
-	/*
-	 * Return the first itemset for the algorithm
-	 */
-	private TreeSet<Itemset> firstItemset() throws IOException {
-		HashMap<String, Float> supports = singleTermsSupport();
-		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
-		
-		for (String term : supports.keySet())
-			if (supports.get(term) >= min_sup)
-				singlesets.add(new Itemset(term, supports.get(term)));
-		
-		return singlesets;
-	}
-	
 	/*
 	 * Writes the frequent itemsets section of the output
 	 */
 	public void writeFrequentItemsets(ArrayList<TreeSet<Itemset>> L) {
 		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(kOutputFile, true)));
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile, true)));
 		    
 		    out.format("==Frequent itemsets (min_sup=%.2f%%)\n", min_sup*100);
 		    for (TreeSet<Itemset> treeSet : L)
 		    	for (Itemset itemset : treeSet)
 		    		out.format("%s, %.2f%%\n", itemset.items, itemset.support*100);
-
-		    out.println();
-		    out.close();
-		} catch (IOException e) {
-		}
-	}
-	
-	public void writeRules(ArrayList<Rule> rules) {
-		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(kOutputFile, true)));
-		    
-		    out.println("==High-confidence association rules (min_conf=" + (int)(min_conf*100) + "%)");
-		    for (Rule rule : rules)
-		    	out.println(rule);
 
 		    out.println();
 		    out.close();
@@ -212,12 +198,27 @@ public class Algorithmn {
 		return rules;
 	}
 
+	
+	public void writeRules(ArrayList<Rule> rules) {
+		try {
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile, true)));
+		    
+		    out.println("==High-confidence association rules (min_conf=" + (int)(min_conf*100) + "%)");
+		    for (Rule rule : rules)
+		    	out.println(rule);
+
+		    out.println();
+		    out.close();
+		} catch (IOException e) {
+		}
+	}
+
 	/*
 	 * Follows the main algorithm of Section 2.1 in the referenced paper
 	 */
 	public void execute() throws IOException{
 		/* Delete old output file if it exists */
-		File oldOutput = new File(kOutputFile);
+		File oldOutput = new File(outputFile);
 		if (oldOutput.exists())
 			oldOutput.delete();
 		
