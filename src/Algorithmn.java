@@ -29,7 +29,6 @@ public class Algorithmn {
 		this.min_conf = min_conf;
 		this.invertedBitSets = new HashMap<String, BitSet>();
 		this.num_trans = Utils.getInvertedBitSets(data, this.invertedBitSets);
-		System.out.println("Num of transactions " + this.num_trans);
 	}
 	
 	public boolean validJoin(Itemset p, Itemset q) {
@@ -99,17 +98,25 @@ public class Algorithmn {
 		return prune(itemsets, candidates);
 	}
 	
+	private HashMap<String, Float> singleTermsSupport() {
+		HashMap<String, Float> supports = new HashMap<String, Float>();
+		
+		for (String str : invertedBitSets.keySet())
+			supports.put(str, (float)(invertedBitSets.get(str).cardinality() / this.num_trans));
+		
+		return supports;
+	}
+	
 	/*
 	 * Return the first itemset for the algorithm
 	 */
 	private TreeSet<Itemset> firstItemset() throws IOException {
-		HashMap<String, Float> counts = new HashMap<String, Float>();
+		HashMap<String, Float> supports = singleTermsSupport();
 		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
 		
-		Utils.termCount(data, counts);
-		for (String term : counts.keySet())
-			if (counts.get(term) >= min_sup)
-				singlesets.add(new Itemset(term, counts.get(term)));
+		for (String term : supports.keySet())
+			if (supports.get(term) >= min_sup)
+				singlesets.add(new Itemset(term, supports.get(term)));
 		
 		return singlesets;
 	}
