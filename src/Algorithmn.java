@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +16,7 @@ public class Algorithmn {
 	 * that item is present in.
 	 */
 	private Map<String, BitSet> invertedBitSets;
+	private final String kOutputFile = "output.txt";
 	
 	private double num_trans;   /* The number of transactions */
 	private float min_sup;		/* The minimum support threshold */
@@ -132,7 +134,7 @@ public class Algorithmn {
 	 */
 	public void writeFrequentItemsets(ArrayList<TreeSet<Itemset>> L) {
 		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("output.txt", true)));
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(kOutputFile, true)));
 		    
 		    out.println("==Frequent itemsets (min_sup=" + (int)(min_sup*100) + "%)");
 		    for (TreeSet<Itemset> treeSet : L)
@@ -198,6 +200,11 @@ public class Algorithmn {
 	 * Follows the main algorithm of Section 2.1 in the referenced paper
 	 */
 	public void execute() throws IOException{
+		/* Delete old output file if it exists */
+		File oldOutput = new File(kOutputFile);
+		if (oldOutput.exists())
+			oldOutput.delete();
+		
 		ArrayList<TreeSet<Itemset>> L = new ArrayList<TreeSet<Itemset>>();
 		TreeSet<Itemset> previous;
 		
@@ -212,7 +219,5 @@ public class Algorithmn {
 		
 		ArrayList<Rule> rules = getRules(L);
 		System.out.println(rules);
-		
-		System.out.println("Done");
 	}
 }
