@@ -137,7 +137,6 @@ public class Algorithmn {
 		    for (TreeSet<Itemset> treeSet : L)
 		    	for (Itemset itemset : treeSet)
 		    		out.format("%s, %.2f%%\n", itemset.items, itemset.support*100);
-		    		// out.println(itemset.items.toString() + ", " + itemset.support*100 + "%");
 
 		    out.println();
 		    out.close();
