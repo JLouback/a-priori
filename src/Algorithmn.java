@@ -141,6 +141,21 @@ public class Algorithmn {
 		    	for (Itemset itemset : treeSet)
 		    		out.println(itemset.items.toString() + ", " + itemset.support*100 + "%");
 
+		    out.println();
+		    out.close();
+		} catch (IOException e) {
+		}
+	}
+	
+	public void writeRules(ArrayList<Rule> rules) {
+		try {
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(kOutputFile, true)));
+		    
+		    out.println("==High-confidence association rules (min_conf=" + (int)(min_sup*100) + "%)");
+		    for (Rule rule : rules)
+		    	out.println(rule);
+
+		    out.println();
 		    out.close();
 		} catch (IOException e) {
 		}
@@ -218,6 +233,6 @@ public class Algorithmn {
 		writeFrequentItemsets(L);
 		
 		ArrayList<Rule> rules = getRules(L);
-		System.out.println(rules);
+		writeRules(rules);
 	}
 }

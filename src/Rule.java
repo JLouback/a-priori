@@ -12,6 +12,6 @@ public class Rule {
 	}
 	
 	public String toString() {
-		return LHS + " => " + RHS;
+		return LHS + " => [" + RHS + "] (Conf: " + (int)(confidence*100) + "%, Supp: " + (int)(support * 100) + "%)";
 	}
 }
