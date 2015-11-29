@@ -151,7 +151,7 @@ public class Algorithmn {
 		try {
 		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(kOutputFile, true)));
 		    
-		    out.println("==High-confidence association rules (min_conf=" + (int)(min_sup*100) + "%)");
+		    out.println("==High-confidence association rules (min_conf=" + (int)(min_conf*100) + "%)");
 		    for (Rule rule : rules)
 		    	out.println(rule);
 
@@ -189,8 +189,12 @@ public class Algorithmn {
 			lhs_bs.and(rhs_bs);
 			numSupporting = lhs_bs.cardinality(); 
 			
-			if (numSupporting / total >= this.min_conf)
-				rules.add(new Rule(lhs, rhs));
+			if (numSupporting / total >= this.min_conf) {
+				Rule rule = new Rule(lhs, rhs);
+				rule.confidence = numSupporting / total;
+				rule.support = (float) (lhs_bs.cardinality() / num_trans);
+				rules.add(rule);
+			}
 			
 			lhs.add(i, rhs);
 		}
