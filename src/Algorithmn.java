@@ -133,10 +133,11 @@ public class Algorithmn {
 		try {
 		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(kOutputFile, true)));
 		    
-		    out.println("==Frequent itemsets (min_sup=" + (int)(min_sup*100) + "%)");
+		    out.format("==Frequent itemsets (min_sup=%.2f%%)\n", min_sup*100);
 		    for (TreeSet<Itemset> treeSet : L)
 		    	for (Itemset itemset : treeSet)
-		    		out.println(itemset.items.toString() + ", " + itemset.support*100 + "%");
+		    		out.format("%s, %.2f%%\n", itemset.items, itemset.support*100);
+		    		// out.println(itemset.items.toString() + ", " + itemset.support*100 + "%");
 
 		    out.println();
 		    out.close();
