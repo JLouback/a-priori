@@ -13,6 +13,5 @@ public class Rule {
 	
 	public String toString() {
 		return String.format("%s => [%s] (Conf: %.2f%%, Supp: %.2f%%", LHS, RHS, confidence*100, support*100);
-		// return LHS + " => [" + RHS + "] (Conf: " + (int)(confidence*100) + "%, Supp: " + (int)(support * 100) + "%)";
 	}
 }
