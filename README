@@ -37,6 +37,11 @@ once as the bit vectors then contain everything we need to run the algorithm.
 This enhancement dropped our exection time from 10-20 minutes to a fraction of a
 second even with the largest of datasets.
 
+For bit vectors, we used Java's BitSet class. While each BitSet object requires
+some overhead, it pays in convenience (auto-resizes, built in methods) and we
+still get the savings of every entry being represented by a single bit. This
+compares favorably to a boolean array where each entry takes an entire byte.
+
 A detailed explanation of the files and main methods are below.
 
 Interaction.java
