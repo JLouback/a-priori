@@ -61,8 +61,8 @@ Algorithm.execute()
       don’t pass the verification from the return set.
   2.3 Return the set of Itemsets that ‘survived’ step 2.2.
 
-3. Run writeFrequentItemsets() to write to output.txt the Itemsets that have
-   sufficient support, contained in list L returned by step 2.
+3 Run writeFrequentItemsets() to write to output.txt the Itemsets that have
+  sufficient support, contained in list L returned by step 2.
 
 4 Run getRules() to generate a list of Rule objects for the Itemsets in L, 
   filtering Rules that don’t meet confidence requirements:
