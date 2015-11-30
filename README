@@ -1,5 +1,5 @@
 GROUP INFORMATION
-----
+-----------------
 Juliana Louback (jl4354) & Anthony Dubis (ajd2194)
 
 
@@ -49,6 +49,7 @@ Algorithm.execute()
 -------------------
 1 Run firstItemset() to obtain a set of single term Itemsets (k=1) which make the
   minimum support threshold:
+
   When initializing an Algorithm object with a given dataset, we initialize a
   HashMap with a term as key and a bit vector as value for each term we
   encounter in the dataset. The bit vector indicates which transactions contain
@@ -66,18 +67,15 @@ Algorithm.execute()
   Itemsets with sufficient support are returned in a set.
 
 2 Run aprioriGen() increments k until the set of Itemsets with k items is empty,
-  storing the set of Itemsets at each iteration in a list L:
-  2.1 join() on round k of aprioriGen(), join receives the set of Itemset objects
-      obtained on round k-1. This method attemps to join Itemset p from the set
-      with all the Itemsets ahead of p (in lexicographical order of items in the 	
-      Itemset). First two Itemsets, p and q, are verified in validJoin(): all k-2
-      first items must be the same and the k-1th item of p is before the k-1th 	
-      item of q in lexicographic order. If valid, the support for the candidate 	  
-      Itemset resulting from joining p and q - the items in p and the last
-      item of q - is calculated (see 2.1 for details). If this support score is
-      greater than or equal to the threshold, it is added to the return set.
+  storing the set of Itemsets at each iteration in a list L. On each iteration,
+  the following steps are performed:
+
+  2.1 join() is used to create all k-sized sets from the (k-1)-sized sets passed
+      into it (from the previous iteration of the algorithm). The sets are only
+      created if they are valid according to section 2.1.1 of the paper. They
+      are also discard if they do not meet the min_sup threshold.
   2.2 prune() receives two sets of Itemsets, that of round k-1 and round k.
-      It verifies if all the possible subsets of Itemsets obtained in round
+      It verifies that all the possible subsets of Itemsets obtained in round
       k are present in the set of Itemsets of round k-1, removing those which
       don’t pass the verification from the return set.
   2.3 Return the set of Itemsets that ‘survived’ step 2.2.
@@ -90,6 +88,7 @@ Algorithm.execute()
   For each Itemset x in the list L of candidate item sets, for each possible n
   choose 1 combination, create a Rule with 1 item of x on the RHS and all the other
   items of x on the LHS:
+
   4.1 Calculate the confidence of the Rule: (the cardinality of an AND of all bit
       vectors for items in the LHS and RHS) divided by (the cardinality of an AND
       of all bit vectors for items in the LHS). If the confidence is sufficient,
