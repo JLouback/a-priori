@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class Utils {
 	
+	/*
+	 *  Populates the bit vectors for each term in the dataset. 
+	 *  Returns the number of transactions/rows.
+	 */
 	public static double getInvertedBitSets(String data, Map<String, BitSet> invertedBitSets) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(data)));
 		String line = null;

@@ -29,6 +29,10 @@ public class Algorithmn {
 		this.num_trans = Utils.getInvertedBitSets(data, this.invertedBitSets);
 	}
 
+	/*
+	 * Returns a hashmap of item (String) => support (float) for all of the
+	 * items in the dataset
+	 */
 	private HashMap<String, Float> singleTermsSupport() {
 		HashMap<String, Float> supports = new HashMap<String, Float>();
 		
@@ -52,6 +56,9 @@ public class Algorithmn {
 		return singlesets;
 	}
 
+	/*
+	 * Ensures a join is valid according to 2.1.1 of the paper
+	 */
 	public boolean validJoin(Itemset p, Itemset q) {
 		int i;
 		
@@ -77,6 +84,11 @@ public class Algorithmn {
 		return (float) (union.cardinality() / this.num_trans);
 	}
 	
+	/*
+	 * Creates all k sized itemsets from the k-1 sized itemsets of the previous iterations
+	 * according to the algorithm in 2.1.1. Also discards these grown candidates that do 
+	 * not meet support requirements.
+	 */
 	private TreeSet<Itemset> join(TreeSet<Itemset> itemsets) {
 		TreeSet<Itemset> candidates = new TreeSet<Itemset>();
 		Iterator<Itemset> it = itemsets.iterator(); 
@@ -100,6 +112,9 @@ public class Algorithmn {
 		return candidates;
 	}
 	
+	/*
+	 * Ensures that all k-1 subsets of the k-sized grown_caniddate are contained in itemsets.
+	 */
 	public boolean containsAllSubsets(TreeSet<Itemset> itemsets, Itemset grown_candidate) {
 		for (int i = 0; i < grown_candidate.items.size(); i++) {
 			String removed = grown_candidate.items.remove(i);
@@ -111,7 +126,11 @@ public class Algorithmn {
 		return true;
 	}
 	
-	public TreeSet<Itemset> prune(TreeSet<Itemset> itemsets, TreeSet<Itemset> grown_candidates) {
+	/*
+	 * Returns k-sized candidate itemsets after verifying that all of their (k-1)-sized subsets are 
+	 * contained in the previously formed (k-1)-sized itemsets that met support requirements
+	 */
+	private TreeSet<Itemset> prune(TreeSet<Itemset> itemsets, TreeSet<Itemset> grown_candidates) {
 		TreeSet<Itemset> survivors = new TreeSet<Itemset>();
 
 		for (Itemset grown_candidate : grown_candidates)
@@ -121,7 +140,7 @@ public class Algorithmn {
 		return survivors;
 	}
 	
-	public TreeSet<Itemset> aprioriGen(TreeSet<Itemset> itemsets, int k) {
+	private TreeSet<Itemset> aprioriGen(TreeSet<Itemset> itemsets, int k) {
 		TreeSet<Itemset> candidates = join(itemsets);
 		return prune(itemsets, candidates);
 	}
@@ -129,7 +148,7 @@ public class Algorithmn {
 	/*
 	 * Writes the frequent itemsets section of the output
 	 */
-	public void writeFrequentItemsets(ArrayList<TreeSet<Itemset>> L) {
+	private void writeFrequentItemsets(ArrayList<TreeSet<Itemset>> L) {
 		try {
 		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile, true)));
 		    
@@ -147,7 +166,6 @@ public class Algorithmn {
 	/*
 	 * @param rules: A list to add rules to as they are discovered
 	 * @param itemset: The frequent itemset we are using to discover rules
-	 * @param raf: The file with the dataset
 	 */
 	private void addConfidentRules(ArrayList<Rule> rules, Itemset itemset) {
 		if (itemset.items.size() <= 1)
@@ -198,8 +216,10 @@ public class Algorithmn {
 		return rules;
 	}
 
-	
-	public void writeRules(ArrayList<Rule> rules) {
+	/*
+	 * Write the generated association rules according to the homework specifications.
+	 */
+	private void writeRules(ArrayList<Rule> rules) {
 		try {
 		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile, true)));
 		    
