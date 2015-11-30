@@ -41,7 +41,7 @@ public class Algorithmn {
 	/*
 	 * Return the first itemset for the algorithm
 	 */
-	private TreeSet<Itemset> firstItemset() throws IOException {
+	private TreeSet<Itemset> firstItemset() {
 		HashMap<String, Float> supports = singleTermsSupport();
 		TreeSet<Itemset> singlesets = new TreeSet<Itemset>();
 		
