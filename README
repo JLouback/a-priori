@@ -5,7 +5,11 @@ Juliana Louback (jl4354) & Anthony Dubis (ajd2194)
 
 FILES
 -----
-- Algorithmn.java - Contains the a-priori algorithm and rule generator- Interaction.java - Handles user interaction- Itemset.java - object for storing an item set and its respective support- Rule.java - object for storing a rule and its respective support and confidence- Utils.java - contains supportive method for BitSet manipulation
+- Algorithmn.java - Contains the a-priori algorithm and rule generator
+- Interaction.java - Handles user interaction
+- Itemset.java - object for storing an item set and its respective support
+- Rule.java - object for storing a rule and its respective support and confidence
+- Utils.java - contains supportive method for BitSet manipulation
 
 
 DATA
@@ -17,6 +21,23 @@ java -jar a-priori.jar <dataset file> <min_sup> <min_conf>
 
 INTERNAL DESIGN
 ---------------
+
+The implementation essentially follows the provided algorithm as specified, but
+there are two details worth mentioning. First, we filter out new frequent
+itemset candidates immediately after joining them (and before they are pruned).
+This prevents itemsets that would eventually get discarded because they don't
+have the minimum support from going through the pruning function.
+
+Second, we create bit vectors for each individual item/term which specifies
+which rows/transactions the item occurs in. This data structure gives us a way
+to quickly AND together bit vectors for other terms (to determine which
+transactions share an item) and then count the number of transactions that
+contain a given subset of items. It also allows us to read the data set only
+once as the bit vectors then contain everything we need to run the algorithm.
+This enhancement dropped our exection time from 10-20 minutes to a fraction of a
+second even with the largest of datasets.
+
+A detailed explanation of the files and main methods are below.
 
 Interaction.java
 ----------------
@@ -37,14 +58,14 @@ Algorithm.execute()
   bit vector B gives us 1001. This implies that transactions 1 and 4 contain both
   A and B. Given that these bitwise operations are extremely fast, this improved
   the running time of our algorithm dramatically. And since the calculations for
-  support and confidence essentially involves getting the total number of times
-  certain itemsets appear in different transactions, all we have to do is count
+  support and confidence essentially involves getting the total number of 
+  transactions that contain a given set of items, all we have to do is count
   the number of 1s in the bit vector once we're done with our operations.
-  In sum, firstItemset() counts the 1’s in each term’s bit vector and generates an  
-  Itemset object with the calculated support and the term; only Itemsets with
-  sufficient support are returned in a set.
+  With these bit vectors, firstItemset() counts the 1’s in each term’s bit vector 
+  and generates an Itemset object with the calculated support for the term; only 
+  Itemsets with sufficient support are returned in a set.
 
-2 Run aprioriGen() incrementing k until the set of Itemsets with k items is empty,
+2 Run aprioriGen() increments k until the set of Itemsets with k items is empty,
   storing the set of Itemsets at each iteration in a list L:
   2.1 join() on round k of aprioriGen(), join receives the set of Itemset objects
       obtained on round k-1. This method attemps to join Itemset p from the set
