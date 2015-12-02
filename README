@@ -1,7 +1,8 @@
------------------
-GROUP INFORMATION
------------------
-Juliana Louback (jl4354) & Anthony Dubis (ajd2194)
+----
+TEAM
+----
+- Anthony Dubis (ajd2194)
+- Juliana Louback (jl4354)
 
 
 -----
@@ -12,53 +13,6 @@ FILES
 
 - example-run.txt - result of java -jar a-priori.jar integrated-dataset.csv 0.01 0.3
 - integrated-dataset.csv - preprocessed dataset used
-
-
-----
-DATA
-----
-The dataset being used is found here:
-https://data.cityofnewyork.us/Social-Services/last_crime_nyc/maj4-ux6k,
-a record of all 311 Service Requests from 2010 to present, updated daily. Using the
-NYCOpenData dashboard, we filtered the data to contain only Complaint Type,
-Location Type, Incident Zip,and Borough. The script Preprocessor.java reads in the
-dataset and outputs the same data but sorts the items in each row lexicographically.
-
-We believe this data could provide interesting insights to the main causes of
-complaints in New York boroughs. This information could be useful to people planning
-to live in a certain region and also could be used by the city administration to
-identify specific departments that may require more attention.
-
-Below are some of our more interesting rule findings:
-
-[Blocked Driveway, Street/Sidewalk] => [QUEENS] (Conf: 42.02%, Supp: 1.11%)
-[Blocked Driveway, Street/Sidewalk] => [BROOKLYN] (Conf: 38.14%, Supp: 1.00%)
-- Two out of 5 boroughs account for roughly 80% of blocked driveway complaints.
-
-[PLUMBING, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 38.63%, Supp: 1.79%)
-[PAINT - PLASTER, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 36.07%, Supp: 1.29%)
-[HEATING, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 33.21%, Supp: 8.61%)
-[ELECTRIC, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 42.91%, Supp: 1.03%)
-- Brooklyn has serious issues with residential buildings. Theoretically, one would 
-  expect about 20% of the complaints per borough. 
-  
- [PLUMBING, RESIDENTIAL BUILDING] => [BRONX] (Conf: 30.18%, Supp: 1.39%)
- [PAINT - PLASTER, RESIDENTIAL BUILDING] => [BRONX] (Conf: 34.36%, Supp: 1.23%)
- [GENERAL CONSTRUCTION, RESIDENTIAL BUILDING] => [BRONX] (Conf: 31.47%, Supp: 1.92%)
- - Bronx apparently joins Brooklyn in having serious issues with residencial buildings.
- 
-[Street Light Condition] => [QUEENS] (Conf: 32.32%, Supp: 1.62%)
-[Street/Sidewalk] => [QUEENS] (Conf: 34.31%, Supp: 1.86%)
-[Street] => [QUEENS] (Conf: 50.01%, Supp: 8.92%)
-- The streets in Queens could use extra attention?
-
-[MANHATTAN] => [HEATING] (Conf: 33.07%, Supp: 5.98%)
-[MANHATTAN, RESIDENTIAL BUILDING] => [HEATING] (Conf: 64.41%, Supp: 5.98%)
-- A lot of Manhattan's complaints are about heating, I couldn't agree more.
-
-Moral of the story, housing in Brooklyn and the Bronx is sketch AF, Queens has the
-lowest residence-related complaints but the streets be mad ugly. Manhattaners are
-lil' bitches about the cold.
 
 
 ----------
@@ -91,6 +45,7 @@ still get the savings of every entry being represented by a single bit. This
 compares favorably to a boolean array where each entry takes an entire byte.
 
 A detailed explanation of the files and main methods are below.
+
 
 Interaction.java
 ----------------
@@ -159,3 +114,54 @@ Algorithm.execute()
 SAMPLE RUN
 ----------
 java -jar a-priori.jar integrated-dataset.csv 0.01 0.3
+
+These parameters were used when discussing our interesting findings below.
+
+----
+DATA
+----
+The dataset being used is found here:
+https://data.cityofnewyork.us/Social-Services/last_crime_nyc/maj4-ux6k,
+a record of all 311 Service Requests from 2010 to present, updated daily. Using the
+NYCOpenData dashboard, we filtered the data to contain only Complaint Type,
+Location Type, Incident Zip,and Borough. The script Preprocessor.java reads in the
+dataset and outputs the same data but sorts the items in each row lexicographically.
+
+We believe this data could provide interesting insights to the main causes of
+complaints in New York boroughs. This information could be useful to people planning
+to live in a certain region and also could be used by the city administration to
+identify specific departments that may require more attention.
+
+Below are some of our more interesting rule findings:
+
+[Blocked Driveway, Street/Sidewalk] => [QUEENS] (Conf: 42.02%, Supp: 1.11%)
+[Blocked Driveway, Street/Sidewalk] => [BROOKLYN] (Conf: 38.14%, Supp: 1.00%)
+- Two out of 5 boroughs account for roughly 80% of blocked driveway complaints.
+
+[PLUMBING, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 38.63%, Supp: 1.79%)
+[PAINT - PLASTER, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 36.07%, Supp: 1.29%)
+[HEATING, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 33.21%, Supp: 8.61%)
+[ELECTRIC, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 42.91%, Supp: 1.03%)
+- Brooklyn has serious issues with residential buildings. Theoretically, one would 
+  expect about 20% of the complaints per borough. 
+  
+ [PLUMBING, RESIDENTIAL BUILDING] => [BRONX] (Conf: 30.18%, Supp: 1.39%)
+ [PAINT - PLASTER, RESIDENTIAL BUILDING] => [BRONX] (Conf: 34.36%, Supp: 1.23%)
+ [GENERAL CONSTRUCTION, RESIDENTIAL BUILDING] => [BRONX] (Conf: 31.47%, Supp: 1.92%)
+ - Bronx apparently joins Brooklyn in having serious issues with residential buildings.
+ 
+[Street Light Condition] => [QUEENS] (Conf: 32.32%, Supp: 1.62%)
+[Street/Sidewalk] => [QUEENS] (Conf: 34.31%, Supp: 1.86%)
+[Street] => [QUEENS] (Conf: 50.01%, Supp: 8.92%)
+- The streets in Queens could use extra attention.
+
+[MANHATTAN] => [HEATING] (Conf: 33.07%, Supp: 5.98%)
+[MANHATTAN, RESIDENTIAL BUILDING] => [HEATING] (Conf: 64.41%, Supp: 5.98%)
+- A lot of Manhattan's complaints are about heating.
+
+Overall, these discovered rules give insight into many of the issues in the
+boroughs of New York. While many of the issues seem to be focused in Brooklyn
+and the Bronx, Manhattan also appears to have many heating complaints.  Renters
+should consider these factors when deciding where to live. Government officials
+should mind these results when deciding where to allocate resources for
+initiatives to alleviate these problems.
