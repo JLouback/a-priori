@@ -1,5 +1,5 @@
 GROUP INFORMATION
-----
+-----------------
 Juliana Louback (jl4354) & Anthony Dubis (ajd2194)
 
 
@@ -64,6 +64,28 @@ java -jar a-priori.jar <dataset file> <min_sup> <min_conf>
 INTERNAL DESIGN
 ---------------
 
+The implementation essentially follows the provided algorithm as specified, but
+there are two details worth mentioning. First, we filter out new frequent
+itemset candidates immediately after joining them (and before they are pruned).
+This prevents itemsets that would eventually get discarded because they don't
+have the minimum support from going through the pruning function.
+
+Second, we create bit vectors for each individual item/term which specifies
+which rows/transactions the item occurs in. This data structure gives us a way
+to quickly AND together bit vectors for other terms (to determine which
+transactions share an item) and then count the number of transactions that
+contain a given subset of items. It also allows us to read the data set only
+once as the bit vectors then contain everything we need to run the algorithm.
+This enhancement dropped our exection time from 10-20 minutes to a fraction of a
+second even with the largest of datasets.
+
+For bit vectors, we used Java's BitSet class. While each BitSet object requires
+some overhead, it pays in convenience (auto-resizes, built in methods) and we
+still get the savings of every entry being represented by a single bit. This
+compares favorably to a boolean array where each entry takes an entire byte.
+
+A detailed explanation of the files and main methods are below.
+
 Interaction.java
 ----------------
 Receives the dataset file path, support and confidence thresholds from the
@@ -74,6 +96,7 @@ Algorithm.execute()
 -------------------
 1 Run firstItemset() to obtain a set of single term Itemsets (k=1) which make the
   minimum support threshold:
+
   When initializing an Algorithm object with a given dataset, we initialize a
   HashMap with a term as key and a bit vector as value for each term we
   encounter in the dataset. The bit vector indicates which transactions contain
@@ -83,10 +106,11 @@ Algorithm.execute()
   bit vector B gives us 1001. This implies that transactions 1 and 4 contain both
   A and B. Given that these bitwise operations are extremely fast, this improved
   the running time of our algorithm dramatically. And since the calculations for
-  support and confidence essentially involves getting the total number of times
-  certain itemsets appear in different transactions, all we have to do is count
+  support and confidence essentially involves getting the total number of 
+  transactions that contain a given set of items, all we have to do is count
   the number of 1s in the bit vector once we're done with our operations.
-  In sum, firstItemset() counts the 1���s in each term���s bit vector and generates an  
+
+  In sum, firstItemset() counts the 1s in each term's bit vector and generates an  
   Itemset object with the calculated support and the term; only Itemsets with
   sufficient support are returned in a set.
 
@@ -102,19 +126,20 @@ Algorithm.execute()
       item of q - is calculated (see 2.1 for details). If this support score is
       greater than or equal to the threshold, it is added to the return set.
   2.2 prune() receives two sets of Itemsets, that of round k-1 and round k.
-      It verifies if all the possible subsets of Itemsets obtained in round
+      It verifies that all the possible subsets of Itemsets obtained in round
       k are present in the set of Itemsets of round k-1, removing those which
-      don���t pass the verification from the return set.
-  2.3 Return the set of Itemsets that ���survived��� step 2.2.
+      don't pass the verification from the return set.
+  2.3 Return the set of Itemsets that "survived" step 2.2.
 
 3 Run writeFrequentItemsets() to write to output.txt the Itemsets that have
   sufficient support, contained in list L returned by step 2.
 
 4 Run getRules() to generate a list of Rule objects for the Itemsets in L, 
-  filtering Rules that don���t meet confidence requirements:
+  filtering Rules that don't meet confidence requirements:
   For each Itemset x in the list L of candidate item sets, for each possible n
   choose 1 combination, create a Rule with 1 item of x on the RHS and all the other
   items of x on the LHS:
+
   4.1 Calculate the confidence of the Rule: (the cardinality of an AND of all bit
       vectors for items in the LHS and RHS) divided by (the cardinality of an AND
       of all bit vectors for items in the LHS). If the confidence is sufficient,
