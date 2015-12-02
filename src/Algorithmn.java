@@ -16,7 +16,7 @@ public class Algorithmn {
 	 * that item is present in.
 	 */
 	private Map<String, BitSet> invertedBitSets;
-	private final String outputFile = "example-run.txt";
+	private final String outputFile = "output.txt";
 	
 	private double num_trans;   /* The number of transactions */
 	private float min_sup;		/* The minimum support threshold */
