@@ -1,0 +1,210 @@
+==Frequent itemsets (min_sup=1.00%)
+[], 24.64%
+[11235], 1.01%
+[BRONX], 18.80%
+[BROOKLYN], 30.80%
+[Blocked Driveway], 2.63%
+[Broken Muni Meter], 1.08%
+[Consumer Complaint], 1.45%
+[Damaged Tree], 13.44%
+[ELECTRIC], 2.41%
+[GENERAL CONSTRUCTION], 6.09%
+[General Construction/Plumbing], 1.74%
+[HEATING], 25.93%
+[Illegal Parking], 1.33%
+[MANHATTAN], 18.09%
+[NONCONST], 2.87%
+[Noise], 1.29%
+[PAINT - PLASTER], 3.57%
+[PLUMBING], 4.62%
+[QUEENS], 25.61%
+[RESIDENTIAL BUILDING], 45.85%
+[STATEN ISLAND], 4.89%
+[Sewer], 1.76%
+[Sidewalk], 1.58%
+[Street], 17.84%
+[Street Condition], 2.32%
+[Street Light Condition], 5.00%
+[Street/Sidewalk], 5.42%
+[Traffic Signal Condition], 4.59%
+[Unspecified], 1.82%
+[Water System], 1.88%
+[, BRONX], 2.83%
+[, BROOKLYN], 6.56%
+[, Consumer Complaint], 1.45%
+[, General Construction/Plumbing], 1.74%
+[, MANHATTAN], 4.78%
+[, Noise], 1.29%
+[, QUEENS], 7.23%
+[, STATEN ISLAND], 1.73%
+[, Sewer], 1.76%
+[, Street Condition], 1.69%
+[, Street Light Condition], 5.00%
+[, Traffic Signal Condition], 4.59%
+[, Unspecified], 1.52%
+[, Water System], 1.88%
+[11235, BROOKLYN], 1.01%
+[BRONX, GENERAL CONSTRUCTION], 1.92%
+[BRONX, HEATING], 7.60%
+[BRONX, PAINT - PLASTER], 1.23%
+[BRONX, PLUMBING], 1.39%
+[BRONX, RESIDENTIAL BUILDING], 13.53%
+[BRONX, Street], 1.16%
+[BROOKLYN, Blocked Driveway], 1.00%
+[BROOKLYN, Damaged Tree], 2.86%
+[BROOKLYN, ELECTRIC], 1.03%
+[BROOKLYN, GENERAL CONSTRUCTION], 2.25%
+[BROOKLYN, HEATING], 8.61%
+[BROOKLYN, NONCONST], 1.09%
+[BROOKLYN, PAINT - PLASTER], 1.29%
+[BROOKLYN, PLUMBING], 1.79%
+[BROOKLYN, RESIDENTIAL BUILDING], 16.18%
+[BROOKLYN, Street], 4.35%
+[BROOKLYN, Street Light Condition], 1.39%
+[BROOKLYN, Street/Sidewalk], 1.94%
+[BROOKLYN, Traffic Signal Condition], 1.46%
+[Blocked Driveway, QUEENS], 1.11%
+[Blocked Driveway, Street/Sidewalk], 2.63%
+[Broken Muni Meter, Street], 1.05%
+[Damaged Tree, QUEENS], 7.85%
+[Damaged Tree, STATEN ISLAND], 1.72%
+[Damaged Tree, Street], 13.42%
+[ELECTRIC, RESIDENTIAL BUILDING], 2.41%
+[GENERAL CONSTRUCTION, RESIDENTIAL BUILDING], 6.09%
+[HEATING, MANHATTAN], 5.98%
+[HEATING, QUEENS], 3.44%
+[HEATING, RESIDENTIAL BUILDING], 25.93%
+[Illegal Parking, Street/Sidewalk], 1.33%
+[MANHATTAN, RESIDENTIAL BUILDING], 9.29%
+[MANHATTAN, Street], 1.42%
+[MANHATTAN, Traffic Signal Condition], 1.10%
+[NONCONST, RESIDENTIAL BUILDING], 2.87%
+[PAINT - PLASTER, RESIDENTIAL BUILDING], 3.57%
+[PLUMBING, RESIDENTIAL BUILDING], 4.62%
+[QUEENS, RESIDENTIAL BUILDING], 6.19%
+[QUEENS, Street], 8.92%
+[QUEENS, Street Light Condition], 1.62%
+[QUEENS, Street/Sidewalk], 1.86%
+[QUEENS, Traffic Signal Condition], 1.28%
+[STATEN ISLAND, Street], 1.96%
+[, BROOKLYN, Street Light Condition], 1.39%
+[, BROOKLYN, Traffic Signal Condition], 1.46%
+[, MANHATTAN, Traffic Signal Condition], 1.10%
+[, QUEENS, Street Light Condition], 1.62%
+[, QUEENS, Traffic Signal Condition], 1.28%
+[BRONX, GENERAL CONSTRUCTION, RESIDENTIAL BUILDING], 1.92%
+[BRONX, HEATING, RESIDENTIAL BUILDING], 7.60%
+[BRONX, PAINT - PLASTER, RESIDENTIAL BUILDING], 1.23%
+[BRONX, PLUMBING, RESIDENTIAL BUILDING], 1.39%
+[BROOKLYN, Blocked Driveway, Street/Sidewalk], 1.00%
+[BROOKLYN, Damaged Tree, Street], 2.85%
+[BROOKLYN, ELECTRIC, RESIDENTIAL BUILDING], 1.03%
+[BROOKLYN, GENERAL CONSTRUCTION, RESIDENTIAL BUILDING], 2.25%
+[BROOKLYN, HEATING, RESIDENTIAL BUILDING], 8.61%
+[BROOKLYN, NONCONST, RESIDENTIAL BUILDING], 1.09%
+[BROOKLYN, PAINT - PLASTER, RESIDENTIAL BUILDING], 1.29%
+[BROOKLYN, PLUMBING, RESIDENTIAL BUILDING], 1.79%
+[Blocked Driveway, QUEENS, Street/Sidewalk], 1.11%
+[Damaged Tree, QUEENS, Street], 7.85%
+[Damaged Tree, STATEN ISLAND, Street], 1.71%
+[HEATING, MANHATTAN, RESIDENTIAL BUILDING], 5.98%
+[HEATING, QUEENS, RESIDENTIAL BUILDING], 3.44%
+
+==High-confidence association rules (min_conf=30%)
+[Consumer Complaint] => [] (Conf: 100.00%, Supp: 1.45%)
+[General Construction/Plumbing] => [] (Conf: 100.00%, Supp: 1.74%)
+[Noise] => [] (Conf: 100.00%, Supp: 1.29%)
+[STATEN ISLAND] => [] (Conf: 35.34%, Supp: 1.73%)
+[Sewer] => [] (Conf: 100.00%, Supp: 1.76%)
+[Street Condition] => [] (Conf: 72.56%, Supp: 1.69%)
+[Street Light Condition] => [] (Conf: 100.00%, Supp: 5.00%)
+[Traffic Signal Condition] => [] (Conf: 100.00%, Supp: 4.59%)
+[Unspecified] => [] (Conf: 83.53%, Supp: 1.52%)
+[Water System] => [] (Conf: 100.00%, Supp: 1.88%)
+[11235] => [BROOKLYN] (Conf: 100.00%, Supp: 1.01%)
+[GENERAL CONSTRUCTION] => [BRONX] (Conf: 31.47%, Supp: 1.92%)
+[BRONX] => [HEATING] (Conf: 40.44%, Supp: 7.60%)
+[PAINT - PLASTER] => [BRONX] (Conf: 34.36%, Supp: 1.23%)
+[PLUMBING] => [BRONX] (Conf: 30.18%, Supp: 1.39%)
+[BRONX] => [RESIDENTIAL BUILDING] (Conf: 71.96%, Supp: 13.53%)
+[Blocked Driveway] => [BROOKLYN] (Conf: 38.14%, Supp: 1.00%)
+[ELECTRIC] => [BROOKLYN] (Conf: 42.91%, Supp: 1.03%)
+[GENERAL CONSTRUCTION] => [BROOKLYN] (Conf: 36.87%, Supp: 2.25%)
+[HEATING] => [BROOKLYN] (Conf: 33.21%, Supp: 8.61%)
+[NONCONST] => [BROOKLYN] (Conf: 37.97%, Supp: 1.09%)
+[PAINT - PLASTER] => [BROOKLYN] (Conf: 36.07%, Supp: 1.29%)
+[PLUMBING] => [BROOKLYN] (Conf: 38.63%, Supp: 1.79%)
+[RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 35.29%, Supp: 16.18%)
+[BROOKLYN] => [RESIDENTIAL BUILDING] (Conf: 52.53%, Supp: 16.18%)
+[Street/Sidewalk] => [BROOKLYN] (Conf: 35.79%, Supp: 1.94%)
+[Traffic Signal Condition] => [BROOKLYN] (Conf: 31.79%, Supp: 1.46%)
+[Blocked Driveway] => [QUEENS] (Conf: 42.02%, Supp: 1.11%)
+[Street/Sidewalk] => [Blocked Driveway] (Conf: 48.63%, Supp: 2.63%)
+[Blocked Driveway] => [Street/Sidewalk] (Conf: 100.00%, Supp: 2.63%)
+[Broken Muni Meter] => [Street] (Conf: 97.58%, Supp: 1.05%)
+[QUEENS] => [Damaged Tree] (Conf: 30.66%, Supp: 7.85%)
+[Damaged Tree] => [QUEENS] (Conf: 58.43%, Supp: 7.85%)
+[STATEN ISLAND] => [Damaged Tree] (Conf: 35.14%, Supp: 1.72%)
+[Street] => [Damaged Tree] (Conf: 75.22%, Supp: 13.42%)
+[Damaged Tree] => [Street] (Conf: 99.83%, Supp: 13.42%)
+[ELECTRIC] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 2.41%)
+[GENERAL CONSTRUCTION] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 6.09%)
+[MANHATTAN] => [HEATING] (Conf: 33.07%, Supp: 5.98%)
+[RESIDENTIAL BUILDING] => [HEATING] (Conf: 56.57%, Supp: 25.93%)
+[HEATING] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 25.93%)
+[Illegal Parking] => [Street/Sidewalk] (Conf: 100.00%, Supp: 1.33%)
+[MANHATTAN] => [RESIDENTIAL BUILDING] (Conf: 51.34%, Supp: 9.29%)
+[NONCONST] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 2.87%)
+[PAINT - PLASTER] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 3.57%)
+[PLUMBING] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 4.62%)
+[Street] => [QUEENS] (Conf: 50.01%, Supp: 8.92%)
+[QUEENS] => [Street] (Conf: 34.83%, Supp: 8.92%)
+[Street Light Condition] => [QUEENS] (Conf: 32.32%, Supp: 1.62%)
+[Street/Sidewalk] => [QUEENS] (Conf: 34.31%, Supp: 1.86%)
+[STATEN ISLAND] => [Street] (Conf: 40.13%, Supp: 1.96%)
+[BROOKLYN, Street Light Condition] => [] (Conf: 100.00%, Supp: 1.39%)
+[BROOKLYN, Traffic Signal Condition] => [] (Conf: 100.00%, Supp: 1.46%)
+[, Traffic Signal Condition] => [BROOKLYN] (Conf: 31.79%, Supp: 1.46%)
+[MANHATTAN, Traffic Signal Condition] => [] (Conf: 100.00%, Supp: 1.10%)
+[QUEENS, Street Light Condition] => [] (Conf: 100.00%, Supp: 1.62%)
+[, Street Light Condition] => [QUEENS] (Conf: 32.32%, Supp: 1.62%)
+[QUEENS, Traffic Signal Condition] => [] (Conf: 100.00%, Supp: 1.28%)
+[GENERAL CONSTRUCTION, RESIDENTIAL BUILDING] => [BRONX] (Conf: 31.47%, Supp: 1.92%)
+[BRONX, GENERAL CONSTRUCTION] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 1.92%)
+[BRONX, RESIDENTIAL BUILDING] => [HEATING] (Conf: 56.19%, Supp: 7.60%)
+[BRONX, HEATING] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 7.60%)
+[PAINT - PLASTER, RESIDENTIAL BUILDING] => [BRONX] (Conf: 34.36%, Supp: 1.23%)
+[BRONX, PAINT - PLASTER] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 1.23%)
+[PLUMBING, RESIDENTIAL BUILDING] => [BRONX] (Conf: 30.18%, Supp: 1.39%)
+[BRONX, PLUMBING] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 1.39%)
+[Blocked Driveway, Street/Sidewalk] => [BROOKLYN] (Conf: 38.14%, Supp: 1.00%)
+[BROOKLYN, Street/Sidewalk] => [Blocked Driveway] (Conf: 51.83%, Supp: 1.00%)
+[BROOKLYN, Blocked Driveway] => [Street/Sidewalk] (Conf: 100.00%, Supp: 1.00%)
+[BROOKLYN, Street] => [Damaged Tree] (Conf: 65.45%, Supp: 2.85%)
+[BROOKLYN, Damaged Tree] => [Street] (Conf: 99.72%, Supp: 2.85%)
+[ELECTRIC, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 42.91%, Supp: 1.03%)
+[BROOKLYN, ELECTRIC] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 1.03%)
+[GENERAL CONSTRUCTION, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 36.87%, Supp: 2.25%)
+[BROOKLYN, GENERAL CONSTRUCTION] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 2.25%)
+[HEATING, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 33.21%, Supp: 8.61%)
+[BROOKLYN, RESIDENTIAL BUILDING] => [HEATING] (Conf: 53.24%, Supp: 8.61%)
+[BROOKLYN, HEATING] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 8.61%)
+[NONCONST, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 37.97%, Supp: 1.09%)
+[BROOKLYN, NONCONST] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 1.09%)
+[PAINT - PLASTER, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 36.07%, Supp: 1.29%)
+[BROOKLYN, PAINT - PLASTER] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 1.29%)
+[PLUMBING, RESIDENTIAL BUILDING] => [BROOKLYN] (Conf: 38.63%, Supp: 1.79%)
+[BROOKLYN, PLUMBING] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 1.79%)
+[QUEENS, Street/Sidewalk] => [Blocked Driveway] (Conf: 59.56%, Supp: 1.11%)
+[Blocked Driveway, Street/Sidewalk] => [QUEENS] (Conf: 42.02%, Supp: 1.11%)
+[Blocked Driveway, QUEENS] => [Street/Sidewalk] (Conf: 100.00%, Supp: 1.11%)
+[QUEENS, Street] => [Damaged Tree] (Conf: 88.01%, Supp: 7.85%)
+[Damaged Tree, Street] => [QUEENS] (Conf: 58.51%, Supp: 7.85%)
+[Damaged Tree, QUEENS] => [Street] (Conf: 99.96%, Supp: 7.85%)
+[STATEN ISLAND, Street] => [Damaged Tree] (Conf: 87.33%, Supp: 1.71%)
+[Damaged Tree, STATEN ISLAND] => [Street] (Conf: 99.73%, Supp: 1.71%)
+[MANHATTAN, RESIDENTIAL BUILDING] => [HEATING] (Conf: 64.41%, Supp: 5.98%)
+[HEATING, MANHATTAN] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 5.98%)
+[QUEENS, RESIDENTIAL BUILDING] => [HEATING] (Conf: 55.49%, Supp: 3.44%)
+[HEATING, QUEENS] => [RESIDENTIAL BUILDING] (Conf: 100.00%, Supp: 3.44%)
+
