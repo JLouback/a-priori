@@ -1,8 +1,10 @@
+-----------------
 GROUP INFORMATION
 -----------------
 Juliana Louback (jl4354) & Anthony Dubis (ajd2194)
 
 
+-----
 FILES
 -----
 - Algorithmn.java - Contains the a-priori algorithm and rule generator- Interaction.java - Handles user interaction- Itemset.java - object for storing an item set and its respective support
@@ -12,6 +14,7 @@ FILES
 - integrated-dataset.csv - preprocessed dataset used
 
 
+----
 DATA
 ----
 The dataset being used is found here:
@@ -57,13 +60,16 @@ Moral of the story, housing in Brooklyn and the Bronx is sketch AF, Queens has t
 lowest residence-related complaints but the streets be mad ugly. Manhattaners are
 lil' bitches about the cold.
 
+
+----------
 HOW TO RUN
 ----------
 java -jar a-priori.jar <dataset file> <min_sup> <min_conf>
 
+
+---------------
 INTERNAL DESIGN
 ---------------
-
 The implementation essentially follows the provided algorithm as specified, but
 there are two details worth mentioning. First, we filter out new frequent
 itemset candidates immediately after joining them (and before they are pruned).
@@ -149,6 +155,7 @@ Algorithm.execute()
   adhere to the specified confidence and support requirements, returned on step 4.
 	
 
+----------
 SAMPLE RUN
 ----------
 java -jar a-priori.jar integrated-dataset.csv 0.01 0.3
